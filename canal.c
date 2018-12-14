@@ -1,18 +1,18 @@
 #include "canal.h"
 
-int code[H3];
+//int code[tailleHadamar];
 
-void creerCode(int code[H3])
+/*void creerCode(int code[tailleHadamard])
 {
   int leCode;
-
-  for (size_t i = 0; i < H3; i++)
+  printf("Entrer le code hadamar : ");
+  for (size_t i = 0; i < tailleHadamard; i++)
   {
     scanf("%i", &leCode);
     code[i] = leCode;
   }
 }
-
+*/
 void encoderMsg(int canal, int msg)
 {
 
@@ -50,9 +50,9 @@ int verifMsg(int msg, int tailleMsg)
     return 0;
 }
 
-int main ()
+int codage (int code[], int tailleHadamard)
 {
-  creerCode(code);
+  //creerCode(code);
 
   int tailleMsg, msg, modulo;
 
@@ -63,8 +63,11 @@ int main ()
   scanf("%i", &msg);
 
   int tabMsg[tailleMsg];
-  int tailleMsgCode = tailleMsg*H3;
+  int tailleMsgCode = tailleMsg*tailleHadamard;
   int tabMsgCode[tailleMsgCode];
+
+  //printf("  Modulo : %i\n", modulo);
+  //printf("  Message : %i\n", msg);
 
   if(!verifMsg(msg, tailleMsg))
   {
@@ -81,8 +84,21 @@ int main ()
         msg -= modulo;
       }
 
-      //printf("     Modulo : %i\n", modulo);
       //afficherTab(tabMsg, tailleMsg);
+    }
+  }
+  else
+  {
+    for (size_t i = 0; i < tailleMsg; i++)
+    {
+      modulo = puiss(tailleMsg-i, 10);
+      if(msg < modulo)
+        tabMsg[i] = 0;
+      else
+      {
+        tabMsg[i] = 1;
+        msg -= modulo;
+      }
     }
   }
 
@@ -90,14 +106,16 @@ int main ()
 
   for (size_t i = 0; i < tailleMsg; i++)
   {
-    for (size_t j = 0; j < H3; j++)
+    for (size_t j = 0; j < tailleHadamard; j++)
     {
+      //printf("%i ", tabMsg[i]);
       if(tabMsg[i] == 1)
-        tabMsgCode[j+i*H3] = code[j];
+        tabMsgCode[j+i*tailleHadamard] = code[j];
       else
-        tabMsgCode[j+i*H3] = -code[j];
+        tabMsgCode[j+i*tailleHadamard] = -code[j];
     }
   }
+  printf("Message codé : ");
   afficherTab(tabMsgCode, tailleMsgCode);
 
 }
